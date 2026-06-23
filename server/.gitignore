@@ -1,0 +1,53 @@
+# --- Project secrets / credentials (see CLAUDE.md) ---
+.env
+.env.*
+oauth.json
+browser.json
+cookies.txt
+
+# --- Byte-compiled / optimized / cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Distribution / packaging ---
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+
+# --- Test / coverage / type-check caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+
+# --- Flask ---
+instance/
+.webassets-cache
+
+# --- Logs / local databases ---
+*.log
+*.sqlite3
+*.db
+
+# --- IDE / editor ---
+.idea/
+.vscode/
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db
