@@ -7,6 +7,7 @@ import {
     SkipBack,
     SkipForward,
     Shuffle,
+    Repeat,
     Volume2,
     VolumeX,
     Music2,
@@ -22,12 +23,14 @@ export default function NowPlayingBar({ onExpand }: { onExpand: () => void }) {
         isPlaying,
         pct,
         shuffle,
+        loop,
         volume,
         index,
         togglePlay,
         prev,
         goNext,
         toggleShuffle,
+        toggleLoop,
         toggleMute,
         setVolume,
     } = usePlayer();
@@ -102,6 +105,14 @@ export default function NowPlayingBar({ onExpand }: { onExpand: () => void }) {
                         className="text-stone-400 hover:text-stone-100"
                     >
                         <SkipForward size={20} />
+                    </button>
+                    <button
+                        onClick={toggleLoop}
+                        aria-label="Repeat"
+                        aria-pressed={loop}
+                        className={loop ? "text-amber-400" : "text-stone-400 hover:text-stone-100"}
+                    >
+                        <Repeat size={18} />
                     </button>
                 </div>
 

@@ -82,7 +82,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                         className="flex items-center gap-3 bg-stone-900 border border-stone-700 rounded-xl px-4 py-3 shadow-2xl text-sm"
                     >
                         {ICONS[toast.kind]}
-                        <span className="flex-1">{toast.message}</span>
+                        <span className="text-stone-300 flex-1">{toast.message}</span>
                         <button
                             onClick={() => dismiss(toast.id)}
                             aria-label="Dismiss"

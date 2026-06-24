@@ -8,6 +8,7 @@ import {
     SkipBack,
     SkipForward,
     Shuffle,
+    Repeat,
     Volume2,
     VolumeX,
     Music2,
@@ -30,12 +31,14 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
         progress,
         pct,
         shuffle,
+        loop,
         volume,
         togglePlay,
         prev,
         goNext,
         jumpTo,
         toggleShuffle,
+        toggleLoop,
         toggleMute,
         setVolume,
     } = usePlayer();
@@ -127,6 +130,16 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
                             >
                                 <SkipForward size={22} />
                             </button>
+                            <button
+                                onClick={toggleLoop}
+                                aria-label="Repeat"
+                                aria-pressed={loop}
+                                className={`transition-colors grid place-items-center ${
+                                    loop ? "text-amber-400" : "text-stone-400 hover:text-stone-100"
+                                }`}
+                            >
+                                <Repeat size={20} />
+                            </button>
 
                             <RatingButtons
                                 size={20}
@@ -161,7 +174,7 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
                     <h2 className="text-xs uppercase tracking-widest text-stone-400 font-semibold mb-3">
                         Up next
                     </h2>
-                    <ul className="list-none m-0 p-0">
+                    <ul className="max-h-96 overflow-y-auto list-none m-0 p-0">
                         {queue.map((t, i) => (
                             <Fragment key={t.videoId + i}>
                                 {i === originalLen && originalLen > 0 && (

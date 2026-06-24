@@ -33,6 +33,7 @@ interface PlayerValue {
     progress: Progress;
     pct: number;
     shuffle: boolean;
+    loop: boolean;
     volume: number;
     originalLen: number;
     isRadio: boolean;
@@ -44,6 +45,7 @@ interface PlayerValue {
     jumpTo: (index: number) => void;
     togglePlay: () => void;
     toggleShuffle: () => void;
+    toggleLoop: () => void;
     toggleMute: () => void;
     setVolume: (value: number) => void;
     rate: (status: LikeStatus) => void;
@@ -66,7 +68,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState<Progress>({ current: 0, duration: 0 });
     const [shuffle, setShuffle] = useState(false);
-    const [volume, setVolumeState] = useState(1);
+    const [loop, setLoop] = useState(false);
+    const [volume, setVolumeState] = useState(.5);
     const [radioSeedPlaylistId, setRadioSeedPlaylistId] = useState<string | null>(null);
     const [likeStatus, setLikeStatus] = useState<LikeStatus>("INDIFFERENT");
     const lastVolume = useRef(1); // restore point for unmuting
@@ -193,11 +196,25 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         });
     }
 
+    const toggleLoop = () => setLoop((on) => !on);
+
     function togglePlay() {
         const a = audioRef.current;
         if (!a) return;
         if (a.paused) a.play();
         else a.pause();
+    }
+
+    // natural track-end: replay the current track when looping, otherwise
+    // advance the queue. The manual Next button always advances (calls goNext).
+    function onEnded() {
+        const a = audioRef.current;
+        if (loop && a) {
+            a.currentTime = 0;
+            a.play().catch(() => {});
+            return;
+        }
+        goNext();
     }
 
     function onTime() {
@@ -241,6 +258,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         progress,
         pct,
         shuffle,
+        loop,
         volume,
         originalLen,
         isRadio,
@@ -252,6 +270,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         jumpTo,
         togglePlay,
         toggleShuffle,
+        toggleLoop,
         toggleMute,
         setVolume,
         rate,
@@ -263,7 +282,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
             <audio
                 ref={audioRef}
                 src={current ? `${BACKEND}/stream/${current.videoId}` : undefined}
-                onEnded={goNext}
+                onEnded={onEnded}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onTimeUpdate={onTime}
