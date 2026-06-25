@@ -2,8 +2,9 @@
 // song that's already present (HTTP 409); we surface that as an info toast and
 // keep the modal open so another playlist can be chosen.
 
-import { Music2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import Modal from "./Modal";
+import Thumbnail from "./Thumbnail";
 import { useToast } from "./ToastProvider";
 import {
     useGetPlaylistsQuery,
@@ -60,17 +61,7 @@ export default function AddToPlaylistModal({
                                 disabled={adding}
                                 className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg hover:bg-stone-800 transition-colors text-sm text-left disabled:opacity-50"
                             >
-                                {playlist.thumbnail ? (
-                                    <img
-                                        src={playlist.thumbnail}
-                                        alt=""
-                                        className="w-10 h-10 rounded object-cover shrink-0"
-                                    />
-                                ) : (
-                                    <span className="w-10 h-10 rounded grid place-items-center bg-stone-800 text-stone-500 shrink-0">
-                                        <Music2 size={16} />
-                                    </span>
-                                )}
+                                <Thumbnail src={playlist.thumbnail} iconSize={16} className="w-10 h-10 rounded shrink-0" />
                                 <span className="flex-1 truncate font-medium">{playlist.title}</span>
                                 {playlist.count != null && (
                                     <span className="text-xs text-stone-400 shrink-0">

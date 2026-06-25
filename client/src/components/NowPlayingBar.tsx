@@ -10,10 +10,10 @@ import {
     Repeat,
     Volume2,
     VolumeX,
-    Music2,
     ChevronUp,
 } from "lucide-react";
 import { usePlayer } from "../player/PlayerContext";
+import Thumbnail from "./Thumbnail";
 import TrackMenu from "./TrackMenu";
 import RatingButtons from "./RatingButtons";
 
@@ -51,13 +51,7 @@ export default function NowPlayingBar({ onExpand }: { onExpand: () => void }) {
                     onClick={onExpand}
                     className="flex items-center gap-3 min-w-0 flex-1 text-left group"
                 >
-                    {current.thumbnail ? (
-                        <img src={current.thumbnail} alt="" className="w-12 h-12 rounded object-cover shrink-0" />
-                    ) : (
-                        <div className="w-12 h-12 rounded bg-stone-800 grid place-items-center text-stone-500 shrink-0">
-                            <Music2 size={18} />
-                        </div>
-                    )}
+                    <Thumbnail src={current.thumbnail} iconSize={18} className="w-12 h-12 rounded shrink-0" />
                     <div className="min-w-0">
                         <p className="text-sm font-medium truncate">{current.title}</p>
                         <p className="text-xs text-stone-400 truncate">{current.artist}</p>

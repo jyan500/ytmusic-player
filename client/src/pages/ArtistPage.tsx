@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { Music2 } from "lucide-react";
 import { useGetArtistQuery } from "../services/api";
 import TrackList from "../components/TrackList";
 import Carousel from "../components/Carousel";
+import Thumbnail from "../components/Thumbnail";
 import type { Card, Track } from "../types";
 
 export default function ArtistPage() {
@@ -15,13 +15,7 @@ export default function ArtistPage() {
     return (
         <div>
             <div className="flex items-center gap-5 mb-8">
-                {data.thumbnail ? (
-                    <img src={data.thumbnail} alt="" className="w-28 h-28 rounded-full object-cover shadow-xl" />
-                ) : (
-                    <div className="w-28 h-28 rounded-full grid place-items-center bg-stone-800 text-stone-500">
-                        <Music2 size={36} />
-                    </div>
-                )}
+                <Thumbnail src={data.thumbnail} iconSize={36} className="w-28 h-28 rounded-full shadow-xl" />
                 <h1 className="font-display text-4xl font-bold">{data.name}</h1>
             </div>
 

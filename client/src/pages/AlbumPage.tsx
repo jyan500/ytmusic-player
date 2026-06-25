@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
-import { Play, Music2 } from "lucide-react";
+import { Play } from "lucide-react";
 import { useGetAlbumQuery } from "../services/api";
 import TrackList from "../components/TrackList";
+import Thumbnail from "../components/Thumbnail";
 import { usePlayer } from "../player/PlayerContext";
 
 export default function AlbumPage() {
@@ -15,13 +16,7 @@ export default function AlbumPage() {
     return (
         <div>
             <div className="flex flex-col md:flex-row items-start md:items-end gap-5 mb-8">
-                {data.thumbnail ? (
-                    <img src={data.thumbnail} alt="" className="w-40 h-40 rounded-xl object-cover shadow-2xl" />
-                ) : (
-                    <div className="w-40 h-40 rounded-xl grid place-items-center bg-stone-800 text-stone-500">
-                        <Music2 size={40} />
-                    </div>
-                )}
+                <Thumbnail src={data.thumbnail} iconSize={40} className="w-40 h-40 rounded-xl shadow-2xl" />
                 <div>
                     <h1 className="font-display text-3xl font-bold">{data.title}</h1>
                     <p className="text-stone-400 mt-1">{data.subtitle}</p>
