@@ -1,10 +1,10 @@
 // A clickable list of tracks (playlist / album / artist songs / search songs).
 // Clicking a row plays the whole list starting at that track.
 
-import { Music2 } from "lucide-react";
 import type { Track } from "../types";
 import { usePlayer } from "../player/PlayerContext";
 import TrackMenu from "./TrackMenu";
+import Thumbnail from "./Thumbnail";
 
 export default function TrackList({
     tracks,
@@ -34,13 +34,7 @@ export default function TrackList({
                                 i + 1
                             )}
                         </span>
-                        {t.thumbnail ? (
-                            <img src={t.thumbnail} alt="" className="w-10 h-10 rounded object-cover shrink-0" />
-                        ) : (
-                            <div className="w-10 h-10 rounded grid place-items-center bg-stone-800 text-stone-500 shrink-0">
-                                <Music2 size={16} />
-                            </div>
-                        )}
+                        <Thumbnail src={t.thumbnail} iconSize={16} className="w-10 h-10 rounded shrink-0" />
                         <span className={`flex-1 text-sm truncate ${active ? "text-amber-400" : ""}`}>
                             {t.title}
                         </span>

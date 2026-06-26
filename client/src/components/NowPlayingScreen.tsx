@@ -11,11 +11,11 @@ import {
     Repeat,
     Volume2,
     VolumeX,
-    Music2,
     Radio,
     ChevronDown,
 } from "lucide-react";
 import { usePlayer } from "../player/PlayerContext";
+import Thumbnail from "./Thumbnail";
 import TrackMenu from "./TrackMenu";
 import RatingButtons from "./RatingButtons";
 import { fmt } from "../lib";
@@ -60,17 +60,11 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
                 </button>
 
                 <section className="flex flex-col md:flex-row gap-8 items-start md:items-center">
-                    {current.thumbnail ? (
-                        <img
-                            className="w-44 h-44 md:w-60 md:h-60 rounded-xl object-cover shadow-2xl"
-                            src={current.thumbnail}
-                            alt=""
-                        />
-                    ) : (
-                        <div className="w-44 h-44 md:w-60 md:h-60 rounded-xl grid place-items-center bg-stone-800 text-stone-400">
-                            <Music2 size={48} />
-                        </div>
-                    )}
+                    <Thumbnail
+                        src={current.thumbnail}
+                        iconSize={48}
+                        className="w-44 h-44 md:w-60 md:h-60 rounded-xl shadow-2xl"
+                    />
                     <div className="flex flex-col gap-3 max-w-xl min-w-0">
                         {isRadio && (
                             <span className="self-start inline-flex items-center gap-1.5 bg-stone-800 text-amber-400 text-xs font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">

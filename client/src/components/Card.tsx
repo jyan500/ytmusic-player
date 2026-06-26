@@ -2,9 +2,9 @@
 // playlists and artists navigate to their page.
 
 import { useNavigate } from "react-router-dom";
-import { Music2 } from "lucide-react";
 import type { Card as CardType } from "../types";
 import { usePlayer } from "../player/PlayerContext";
+import Thumbnail from "./Thumbnail";
 
 export default function Card({ card }: { card: CardType }) {
     const navigate = useNavigate();
@@ -33,17 +33,11 @@ export default function Card({ card }: { card: CardType }) {
 
     return (
         <button onClick={onClick} className="w-40 shrink-0 text-left group">
-            {card.thumbnail ? (
-                <img
-                    src={card.thumbnail}
-                    alt=""
-                    className={`w-40 h-40 object-cover shadow-lg group-hover:brightness-110 transition ${shape}`}
-                />
-            ) : (
-                <div className={`w-40 h-40 grid place-items-center bg-stone-800 text-stone-500 ${shape}`}>
-                    <Music2 size={32} />
-                </div>
-            )}
+            <Thumbnail
+                src={card.thumbnail}
+                iconSize={32}
+                className={`w-40 h-40 shadow-lg group-hover:brightness-110 transition ${shape}`}
+            />
             <p className={`mt-2 text-sm font-medium truncate ${round ? "text-center" : ""}`}>
                 {card.title}
             </p>
