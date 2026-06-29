@@ -95,6 +95,17 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         if (a) a.volume = volume;
     }, [volume]);
 
+    // warm the backend URL cache for the next queued track while this one plays,
+    // so its /stream request skips the slow yt-dlp extraction. Best-effort and
+    // fire-and-forget; we de-dupe so a re-render doesn't re-hit the same id.
+    const prefetched = useRef<Set<string>>(new Set());
+    useEffect(() => {
+        const next = queue[index + 1];
+        if (!next || prefetched.current.has(next.videoId)) return;
+        prefetched.current.add(next.videoId);
+        fetch(`${BACKEND}/prefetch/${next.videoId}`).catch(() => {});
+    }, [index, queue]);
+
     // reflect the current track's real rating: use the value it arrived with,
     // otherwise look it up lazily (e.g. songs played from a home/search card)
     useEffect(() => {
