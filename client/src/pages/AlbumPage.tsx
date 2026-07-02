@@ -3,6 +3,7 @@ import { Play } from "lucide-react";
 import { useGetAlbumQuery } from "../services/api";
 import TrackList from "../components/TrackList";
 import Thumbnail from "../components/Thumbnail";
+import ArtistLinks from "../components/ArtistLinks";
 import { usePlayer } from "../player/PlayerContext";
 
 export default function AlbumPage() {
@@ -19,7 +20,9 @@ export default function AlbumPage() {
                 <Thumbnail src={data.thumbnail} iconSize={40} className="w-40 h-40 rounded-xl shadow-2xl" />
                 <div>
                     <h1 className="font-display text-3xl font-bold">{data.title}</h1>
-                    <p className="text-stone-400 mt-1">{data.subtitle}</p>
+                    <p className="text-stone-400 mt-1">
+                        <ArtistLinks artists={data.artists} fallback={data.subtitle} />
+                    </p>
                     {data.tracks.length > 0 && (
                         <button
                             onClick={() => playTracks(data.tracks, 0)}

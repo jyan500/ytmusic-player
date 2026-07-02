@@ -18,6 +18,7 @@ import { usePlayer } from "../player/PlayerContext";
 import Thumbnail from "./Thumbnail";
 import TrackMenu from "./TrackMenu";
 import RatingButtons from "./RatingButtons";
+import ArtistLinks from "./ArtistLinks";
 import { fmt } from "../lib";
 
 export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
@@ -74,7 +75,13 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
                         <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight leading-tight m-0">
                             {current.title}
                         </h1>
-                        <p className="text-stone-400 text-base md:text-lg m-0">{current.artist}</p>
+                        <p className="text-stone-400 text-base md:text-lg m-0">
+                            <ArtistLinks
+                                artists={current.artists}
+                                fallback={current.artist}
+                                onNavigate={onClose}
+                            />
+                        </p>
 
                         <div className={isPlaying ? "eq playing mt-1" : "eq mt-1"}>
                             <span /><span /><span /><span /><span />
@@ -194,7 +201,11 @@ export default function NowPlayingScreen({ onClose }: { onClose: () => void }) {
                                         {t.title}
                                     </span>
                                     <span className="hidden md:block text-sm text-stone-400 shrink-0">
-                                        {t.artist}
+                                        <ArtistLinks
+                                            artists={t.artists}
+                                            fallback={t.artist}
+                                            onNavigate={onClose}
+                                        />
                                     </span>
                                     <span className="text-sm text-stone-400 tabular-nums shrink-0">
                                         {t.duration}

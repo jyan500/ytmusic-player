@@ -23,6 +23,7 @@ const toTrack = (c: CardType): Track => ({
     videoId: c.videoId!,
     title: c.title,
     artist: c.subtitle,
+    artists: c.artists,
     duration: "",
     thumbnail: c.thumbnail,
 });

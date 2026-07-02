@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { Card as CardType } from "../types";
 import { usePlayer } from "../player/PlayerContext";
 import Thumbnail from "./Thumbnail";
+import ArtistLinks from "./ArtistLinks";
 
 export default function Card({ card }: { card: CardType }) {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function Card({ card }: { card: CardType }) {
                 videoId: card.videoId,
                 title: card.title,
                 artist: card.subtitle,
+                artists: card.artists,
                 duration: "",
                 thumbnail: card.thumbnail,
             });
@@ -32,18 +34,24 @@ export default function Card({ card }: { card: CardType }) {
     const shape = round ? "rounded-full" : "rounded-xl";
 
     return (
-        <button onClick={onClick} className="w-40 shrink-0 text-left group">
-            <Thumbnail
-                src={card.thumbnail}
-                iconSize={32}
-                className={`w-40 h-40 shadow-lg group-hover:brightness-110 transition ${shape}`}
-            />
-            <p className={`mt-2 text-sm font-medium truncate ${round ? "text-center" : ""}`}>
-                {card.title}
-            </p>
+        // A <div>, not a <button>, because the subtitle can contain artist
+        // <Link>s and anchors can't be nested inside a button. The thumbnail +
+        // title stay a real button so the primary play/navigate action remains
+        // keyboard-accessible.
+        <div className="w-40 shrink-0">
+            <button onClick={onClick} className="block w-40 text-left group">
+                <Thumbnail
+                    src={card.thumbnail}
+                    iconSize={32}
+                    className={`w-40 h-40 shadow-lg group-hover:brightness-110 transition ${shape}`}
+                />
+                <p className={`mt-2 text-sm font-medium truncate ${round ? "text-center" : ""}`}>
+                    {card.title}
+                </p>
+            </button>
             <p className={`text-xs text-stone-400 truncate ${round ? "text-center" : ""}`}>
-                {card.subtitle}
+                <ArtistLinks artists={card.artists} extra={card.extra} fallback={card.subtitle} />
             </p>
-        </button>
+        </div>
     );
 }

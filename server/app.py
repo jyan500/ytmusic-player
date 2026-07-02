@@ -125,13 +125,16 @@ def normalize_track(t):
     minimal object the frontend needs. Returns None for unplayable entries."""
     if not t or not t.get("videoId"):
         return None
-    artists = t.get("artists") or []
-    names = ", ".join(a["name"] for a in artists if a and a.get("name"))
+    arts = _artist_refs(t)
+    names = ", ".join(a["name"] for a in arts)
     thumbs = t.get("thumbnails") or t.get("thumbnail") or []
     return {
         "videoId": t["videoId"],
         "title": t.get("title", "Unknown title"),
         "artist": names or "Unknown artist",
+        # structured artists (name + channel id) so the UI can link each one;
+        # the "artist" string above stays as a display/fallback.
+        "artists": arts,
         "duration": t.get("duration") or t.get("length") or "",
         "thumbnail": thumbs[-1]["url"] if thumbs else None,
         # setVideoId is the playlist-membership handle remove_playlist_items needs;
@@ -149,6 +152,15 @@ def _largest_thumb(item):
 def _join_artists(item):
     arts = item.get("artists") or []
     return ", ".join(a["name"] for a in arts if a and a.get("name"))
+
+
+def _artist_refs(item):
+    """Structured artists for the UI: [{name, id}] where id is the channelId
+    (may be None for artists YouTube didn't link, e.g. a bare "Unknown artist").
+    The frontend renders each name with an id as a link to its artist page."""
+    arts = item.get("artists") or []
+    return [{"name": a["name"], "id": a.get("id")}
+            for a in arts if a and a.get("name")]
 
 
 # videoTypes that aren't audio tracks. We stream audio only, but a regular
@@ -186,27 +198,34 @@ def normalize_card(item):
 
     # Song / video: anything with a videoId plays directly.
     if item.get("videoId"):
-        subtitle = _join_artists(item) or item.get("description") or ""
-        if item.get("views"):
-            tail = f"{item['views']} views"
-            subtitle = f"{subtitle} • {tail}" if subtitle else tail
+        arts = _artist_refs(item)
+        base = _join_artists(item) or item.get("description") or ""
+        # "extra" is the non-artist tail (e.g. view count) the UI appends after
+        # the linked artist names; subtitle stays as the plain combined string.
+        extra = f"{item['views']} views" if item.get("views") else ""
+        subtitle = f"{base} • {extra}" if base and extra else (base or extra)
         return {
             "kind": "song",
             "title": item.get("title", "Unknown title"),
             "subtitle": subtitle or "Song",
+            "artists": arts,
+            "extra": extra,
             "thumbnail": thumb,
             "videoId": item["videoId"],
         }
 
     # Album: a browseId like MPRE..., usually with a playlistId alongside.
     if rtype == "album" or browse_id.startswith("MPRE"):
-        subtitle = _join_artists(item) or item.get("type") or "Album"
-        if item.get("year"):
-            subtitle = f"{subtitle} • {item['year']}"
+        arts = _artist_refs(item)
+        base = _join_artists(item) or item.get("type") or "Album"
+        extra = str(item["year"]) if item.get("year") else ""
+        subtitle = f"{base} • {extra}" if extra else base
         return {
             "kind": "album",
             "title": item.get("title", "Untitled"),
             "subtitle": subtitle,
+            "artists": arts,
+            "extra": extra,
             "thumbnail": thumb,
             "browseId": browse_id,
         }
@@ -415,6 +434,7 @@ def album(browse_id):
     return jsonify({
         "title": data.get("title", ""),
         "subtitle": _join_artists(data) or data.get("type", "Album"),
+        "artists": _artist_refs(data),
         "thumbnail": fallback,
         "tracks": tracks,
     })

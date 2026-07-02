@@ -5,6 +5,7 @@ import type { Track } from "../types";
 import { usePlayer } from "../player/PlayerContext";
 import TrackMenu from "./TrackMenu";
 import Thumbnail from "./Thumbnail";
+import ArtistLinks from "./ArtistLinks";
 
 export default function TrackList({
     tracks,
@@ -39,7 +40,7 @@ export default function TrackList({
                             {t.title}
                         </span>
                         <span className="hidden md:block flex-1 text-sm text-stone-400 truncate">
-                            {t.artist}
+                            <ArtistLinks artists={t.artists} fallback={t.artist} />
                         </span>
                         <span className="text-sm text-stone-400 tabular-nums shrink-0">
                             {t.duration}

@@ -2,10 +2,18 @@
 
 export type LikeStatus = "LIKE" | "DISLIKE" | "INDIFFERENT";
 
+// A single artist with an optional channel id. `id` may be missing/null for
+// artists YouTube didn't link (e.g. "Unknown artist"); those render as text.
+export interface ArtistRef {
+    name: string;
+    id?: string | null;
+}
+
 export interface Track {
     videoId: string;
     title: string;
-    artist: string;
+    artist: string;               // joined names, kept for display/fallback
+    artists?: ArtistRef[];        // structured artists for per-name links
     duration: string;
     thumbnail: string | null;
     setVideoId?: string | null;   // playlist-membership handle (for removal)
@@ -25,7 +33,9 @@ export type CardKind = "song" | "album" | "playlist" | "artist";
 export interface Card {
     kind: CardKind;
     title: string;
-    subtitle: string;
+    subtitle: string;         // full combined string, kept for display/fallback
+    artists?: ArtistRef[];    // structured artists (song/album) for per-name links
+    extra?: string;           // non-artist tail shown after the links (views/year)
     thumbnail: string | null;
     videoId?: string;     // kind === "song"
     browseId?: string;    // kind === "album" | "artist"
@@ -45,6 +55,7 @@ export interface PlaylistData {
 export interface AlbumData {
     title: string;
     subtitle: string;
+    artists?: ArtistRef[];    // structured artists for linking the header
     thumbnail: string | null;
     tracks: Track[];
 }
