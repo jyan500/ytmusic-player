@@ -16,6 +16,7 @@ import { usePlayer } from "../player/PlayerContext";
 import Thumbnail from "./Thumbnail";
 import TrackMenu from "./TrackMenu";
 import RatingButtons from "./RatingButtons";
+import ArtistLinks from "./ArtistLinks";
 
 export default function NowPlayingBar({ onExpand }: { onExpand: () => void }) {
     const {
@@ -46,21 +47,28 @@ export default function NowPlayingBar({ onExpand }: { onExpand: () => void }) {
                 />
             </div>
             <div className="flex items-center gap-4 px-4 py-3">
-                {/* track info — click to expand */}
-                <button
-                    onClick={onExpand}
-                    className="flex items-center gap-3 min-w-0 flex-1 text-left group"
-                >
-                    <Thumbnail src={current.thumbnail} iconSize={18} className="w-12 h-12 rounded shrink-0" />
+                {/* track info — click to expand. Not a single <button> because
+                    the artist line holds <Link>s (anchors can't nest in a
+                    button); the thumbnail/title/chevron stay buttons instead. */}
+                <div className="flex items-center gap-3 min-w-0 flex-1 group">
+                    <button onClick={onExpand} aria-label="Expand now playing" className="shrink-0">
+                        <Thumbnail src={current.thumbnail} iconSize={18} className="w-12 h-12 rounded" />
+                    </button>
                     <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{current.title}</p>
-                        <p className="text-xs text-stone-400 truncate">{current.artist}</p>
+                        <button onClick={onExpand} className="block max-w-full text-left">
+                            <p className="text-sm font-medium truncate">{current.title}</p>
+                        </button>
+                        <p className="text-xs text-stone-400 truncate">
+                            <ArtistLinks artists={current.artists} fallback={current.artist} />
+                        </p>
                     </div>
-                    <ChevronUp
-                        size={16}
-                        className="text-stone-500 opacity-0 group-hover:opacity-100 transition shrink-0"
-                    />
-                </button>
+                    <button onClick={onExpand} aria-label="Expand now playing" className="shrink-0">
+                        <ChevronUp
+                            size={16}
+                            className="text-stone-500 opacity-0 group-hover:opacity-100 transition"
+                        />
+                    </button>
+                </div>
 
                 {/* rating + options */}
                 <div className="flex items-center gap-2 shrink-0">
