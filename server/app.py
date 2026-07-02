@@ -453,6 +453,8 @@ YDL_OPTS = {
     "format": "251/bestaudio[ext=webm]/bestaudio",  # opus/webm: Chrome-native
     "quiet": True,
     "no_warnings": True,
+    "skip_download": True,
+    "extract_flat": True,
     # "cookiefile": "cookies.txt",        # comment out if you don't have one yet
     # "cookiesfrombrowser": ("chrome",),
     # On HTTP 403: install yt-dlp-get-pot + a provider, target the mweb client.
@@ -470,6 +472,19 @@ def resolve_stream_url(video_id, force=False):
     url = info["url"]
     _url_cache[video_id] = (url, time.time() + _CACHE_TTL)
     return url
+
+
+@app.route("/prefetch/<video_id>")
+def prefetch(video_id):
+    """Warm the URL cache for an upcoming track so its /stream request skips the
+    slow extract_info. The client fires this for the next queue item while the
+    current one plays; failures are swallowed (it's a best-effort warm-up, and
+    /stream will re-extract on demand anyway)."""
+    try:
+        resolve_stream_url(video_id)
+    except Exception:
+        pass
+    return ("", 204)
 
 
 @app.route("/stream/<video_id>")
