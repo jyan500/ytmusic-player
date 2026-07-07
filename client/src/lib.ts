@@ -2,7 +2,7 @@
 
 import type { Track } from "./types";
 
-export const BACKEND = "http://localhost:5000";
+export const BACKEND = "http://192.168.1.66:5000";
 
 export const fmt = (s: number) => {
     if (!s || isNaN(s)) return "0:00";
