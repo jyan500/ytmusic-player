@@ -2,7 +2,9 @@
 
 import type { Track } from "./types";
 
-export const BACKEND = "http://localhost:5000";
+// Backend base URL. Set VITE_BACKEND in client/.env (e.g. your LAN IP so the
+// phone can reach it); falls back to localhost for desktop dev.
+export const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:5000";
 
 export const fmt = (s: number) => {
     if (!s || isNaN(s)) return "0:00";

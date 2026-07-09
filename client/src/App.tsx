@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
+import { Menu } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import TopSearchBar from "./components/TopSearchBar";
 import NowPlayingBar from "./components/NowPlayingBar";
@@ -12,16 +13,28 @@ import ArtistPage from "./pages/ArtistPage";
 
 function Layout() {
     const [expanded, setExpanded] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
         <div
-            className="flex flex-col h-screen bg-stone-950 text-stone-100"
+            // h-[100dvh] (dynamic viewport height) instead of h-screen so the
+            // NowPlayingBar isn't hidden under the mobile browser's toolbar.
+            className="flex flex-col h-[100dvh] bg-stone-950 text-stone-100"
             style={{ fontFamily: "Inter, system-ui, sans-serif" }}
         >
             <div className="flex flex-1 min-h-0">
-                <Sidebar />
+                <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
                 <div className="flex-1 flex flex-col min-w-0">
-                    <header className="shrink-0 px-6 py-4 border-b border-stone-800">
-                        <TopSearchBar />
+                    <header className="shrink-0 px-4 md:px-6 py-4 border-b border-stone-800 flex items-center gap-3">
+                        <button
+                            onClick={() => setMenuOpen(true)}
+                            aria-label="Open menu"
+                            className="md:hidden shrink-0 text-stone-300 hover:text-stone-100"
+                        >
+                            <Menu size={22} />
+                        </button>
+                        <div className="flex-1 min-w-0">
+                            <TopSearchBar />
+                        </div>
                     </header>
                     <main className="flex-1 overflow-y-auto p-6 md:p-8">
                         <Outlet />
