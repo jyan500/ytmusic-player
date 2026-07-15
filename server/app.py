@@ -365,9 +365,13 @@ def recommend():
     if not seed_video and not seed_playlist:
         abort(400, "pass video_id and/or playlist_id")
 
+    # Seed the radio on the *track*, not the playlist. Passing the real
+    # playlistId makes ytmusicapi build a radio OF that playlist (RDAMPL…),
+    # which just replays the same songs. Omitting it lets ytmusicapi use
+    # RDAMVM<videoId> — a song radio that branches out to similar tracks.
     watch = yt.get_watch_playlist(
         videoId=seed_video,
-        playlistId=seed_playlist,
+        playlistId=seed_playlist if not seed_video else None,
         radio=True,        # generate an endless radio from the seed
         limit=30,
     )
