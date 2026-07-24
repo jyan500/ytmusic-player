@@ -65,6 +65,7 @@ export interface ArtistSection {
     title: string;
     kind: "tracks" | "cards";
     items: Track[] | Card[];
+    browseId?: string | null;   // "see all" playlist id (tracks sections only)
 }
 
 export interface ArtistData {

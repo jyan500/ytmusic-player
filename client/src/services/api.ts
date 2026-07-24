@@ -111,6 +111,7 @@ export const {
     useGetPlaylistsQuery,
     useGetHomeQuery,
     useGetPlaylistQuery,
+    useLazyGetPlaylistQuery,
     useGetAlbumQuery,
     useGetArtistQuery,
     useGetSearchQuery,
