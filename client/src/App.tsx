@@ -10,6 +10,7 @@ import SearchPage from "./pages/SearchPage";
 import PlaylistPage from "./pages/PlaylistPage";
 import AlbumPage from "./pages/AlbumPage";
 import ArtistPage from "./pages/ArtistPage";
+import ArtistSongsPage from "./pages/ArtistSongsPage";
 
 function Layout() {
     const [expanded, setExpanded] = useState(false);
@@ -56,6 +57,7 @@ export default function App() {
                 <Route path="playlist/:id" element={<PlaylistPage />} />
                 <Route path="album/:id" element={<AlbumPage />} />
                 <Route path="artist/:id" element={<ArtistPage />} />
+                <Route path="artist/:id/songs" element={<ArtistSongsPage />} />
             </Route>
         </Routes>
     );

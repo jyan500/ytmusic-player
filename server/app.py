@@ -449,12 +449,20 @@ def artist(channel_id):
     data = yt.get_artist(channel_id)
     sections = []
     songs = []
-    for t in (data.get("songs") or {}).get("results") or []:
+    songs_section = data.get("songs") or {}
+    for t in songs_section.get("results") or []:
         nt = normalize_track(t)
         if nt:
             songs.append(nt)
     if songs:
-        sections.append({"title": "Songs", "kind": "tracks", "items": songs})
+        # browseId points at the "see all" playlist of every top song, which the
+        # client fetches for the Show all page and the Shuffle/Mix actions.
+        sections.append({
+            "title": "Songs",
+            "kind": "tracks",
+            "items": songs,
+            "browseId": songs_section.get("browseId"),
+        })
     for key, title in (("albums", "Albums"), ("singles", "Singles"),
                        ("videos", "Videos"), ("related", "Fans might also like")):
         cards = _cards((data.get(key) or {}).get("results"))
